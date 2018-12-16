@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/CamoProject.unity
+- path: Assets/WalkStraight.unity
   isLoaded: 1
   isActive: 1
