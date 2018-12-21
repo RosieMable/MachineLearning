@@ -10,6 +10,7 @@ public class DNABot
     int dnaLength = 0;
     int maxValues = 0;
 
+    //Constructor
     public DNABot(int l, int v)
     {
         dnaLength = l;

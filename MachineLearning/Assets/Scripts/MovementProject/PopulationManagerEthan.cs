@@ -78,7 +78,7 @@ public class PopulationManagerEthan : MonoBehaviour {
     {
         List<GameObject> newPopulation = new List<GameObject>();
 
-        List<GameObject> sortedList = population.OrderBy(o => o.GetComponent<Brain>().timeAlive).ToList();
+        List<GameObject> sortedList = population.OrderBy(o => o.GetComponent<Brain>().timeAlive).ThenBy(o => o.GetComponent<Brain>().distanceTravalled).ToList();
 
         population.Clear();
 

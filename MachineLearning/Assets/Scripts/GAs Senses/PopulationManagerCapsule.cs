@@ -1,0 +1,111 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
+
+public class PopulationManagerCapsule : MonoBehaviour
+{
+
+    public GameObject botPrefab; // reference to the go person
+    public int populationSize = 50;
+
+    List<GameObject> population = new List<GameObject>();
+    public static float elapsed = 0; //Timer to count how long the people in the scene have survived
+
+
+    [SerializeField]
+    int trialTime = 10; //Define how much time we have to click on the people
+    int generation = 1;
+
+    GUIStyle guiStyle = new GUIStyle(); //Set up to quickly modify things that happen on the gui
+
+    private void OnGUI()
+    {
+        guiStyle.fontSize = 25;
+        guiStyle.normal.textColor = Color.white;
+        GUI.BeginGroup(new Rect(10, 10, 250, 150));
+        GUI.Box(new Rect(0, 0, 140, 140), "Stats", guiStyle);
+        GUI.Label(new Rect(10, 25, 200, 30), "Generation: " + generation, guiStyle);
+        GUI.Label(new Rect(10, 50, 200, 30), string.Format("Time: {0:0.00}", elapsed), guiStyle);
+        GUI.Label(new Rect(10, 75, 200, 30), "Populaton: " + population.Count, guiStyle);
+        GUI.EndGroup();
+
+
+    }
+
+
+    // Use this for initialization
+    void Start()
+    {
+
+        for (int i = 0; i < populationSize; i++)
+        {
+            Vector3 startingPos = new Vector3(this.transform.position.x + Random.Range(-2, 2),
+                                               this.transform.position.y,
+                                                this.transform.position.z + Random.Range(-2, 2));
+
+            GameObject b = Instantiate(botPrefab, startingPos, this.transform.rotation);
+            b.GetComponent<BrainCapsule>().Init();
+            population.Add(b);
+        }
+    }
+
+    GameObject Breed(GameObject parent1, GameObject parent2)
+    {
+        Vector3 startingPos = new Vector3(this.transform.position.x + Random.Range(-2, 2),
+                                               this.transform.position.y,
+                                                this.transform.position.z + Random.Range(-2, 2));
+
+        GameObject offSpring = Instantiate(botPrefab, startingPos, this.transform.rotation);
+        BrainCapsule b = offSpring.GetComponent<BrainCapsule>();
+
+        //swap parent dna
+        if (Random.Range(0, 100) == 1) //mutate 1 in 100
+        {
+            //Run through each gene value of their parents and you randomly swap them
+            b.Init();
+            b.DNACapsule.Mutate();
+        }
+        else
+        {
+            b.Init();
+            b.DNACapsule.Combine(parent1.GetComponent<BrainCapsule>().DNACapsule, parent2.GetComponent<BrainCapsule>().DNACapsule);
+        }
+
+        return offSpring;
+    }
+
+    private void BreedNewPopulation()
+    {
+        List<GameObject> newPopulation = new List<GameObject>();
+
+        List<GameObject> sortedList = population.OrderBy(o => (o.GetComponent<BrainCapsule>().timeWalking + o.GetComponent<BrainCapsule>().timeAlive)).ToList();
+
+        population.Clear();
+
+        //Breed upper half of sorted list
+        for (int i = (int)(sortedList.Count / 2.0f) - 1; i < sortedList.Count - 1; i++) //Looping around the whole list, starting halfway down
+        {
+            population.Add(Breed(sortedList[i], sortedList[i + 1]));
+            population.Add(Breed(sortedList[i + 1], sortedList[i]));
+        }
+
+        //destroy all parent and previous population
+        for (int i = 0; i < sortedList.Count; i++)
+        {
+            Destroy(sortedList[i]);
+        }
+
+        generation++;
+    }
+
+    private void Update()
+    {
+        elapsed += Time.deltaTime;
+        if (elapsed >= trialTime)
+        {
+            BreedNewPopulation();
+            elapsed = 0;
+        }
+    }
+}

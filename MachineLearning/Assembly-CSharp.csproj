@@ -63,6 +63,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\CamoProject\DNA.cs" />
     <Compile Include="Assets\Scripts\CamoProject\PopulationManager.cs" />
+    <Compile Include="Assets\Scripts\GAs Senses\BrainCapsule.cs" />
+    <Compile Include="Assets\Scripts\GAs Senses\DNACapsule.cs" />
+    <Compile Include="Assets\Scripts\GAs Senses\PopulationManagerCapsule.cs" />
     <Compile Include="Assets\Scripts\MovementProject\Brain.cs" />
     <Compile Include="Assets\Scripts\MovementProject\DNABot.cs" />
     <Compile Include="Assets\Scripts\MovementProject\PopulationManagerEthan.cs" />

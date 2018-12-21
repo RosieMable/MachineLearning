@@ -13,6 +13,8 @@ public class Brain : MonoBehaviour {
 
     private ThirdPersonCharacter m_Character;
     private Vector3 m_Move;
+    private Vector3 startPosition;
+    public float distanceTravalled;
     private bool m_Jump;
     bool alive = true;
 
@@ -38,6 +40,7 @@ public class Brain : MonoBehaviour {
         m_Character = GetComponent<ThirdPersonCharacter>();
         timeAlive = 0;
         alive = true;
+        startPosition = this.transform.position;
     }
 
     private void Update()
@@ -64,6 +67,7 @@ public class Brain : MonoBehaviour {
         if (alive)
         {
             timeAlive += Time.deltaTime;
+            distanceTravalled = Vector3.Distance(this.transform.position, startPosition);
         }
     }
 }
