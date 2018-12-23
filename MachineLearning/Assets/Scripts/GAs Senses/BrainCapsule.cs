@@ -13,6 +13,14 @@ public class BrainCapsule : MonoBehaviour {
     public bool alive = true;
     bool seeGround = true;
 
+    public GameObject CharacterPrefab;
+    GameObject Character;
+
+    private void OnDestroy()
+    {
+        Destroy(Character);
+    }
+
     private void OnCollisionEnter(Collision obj)
     {
         if (obj.gameObject.tag == "dead")
@@ -32,6 +40,8 @@ public class BrainCapsule : MonoBehaviour {
         DNACapsule = new DNACapsule(DNALength,3);
         timeAlive = 0;
         alive = true;
+        Character = Instantiate(CharacterPrefab, this.transform.position, this.transform.rotation);
+        Character.GetComponent<UnityStandardAssets.Characters.ThirdPerson.AICharacterControl>().target = this.transform;
     }
 
     private void Update()

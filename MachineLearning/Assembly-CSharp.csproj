@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GenerateMaze.cs" />
     <Compile Include="Assets\Scripts\CamoProject\DNA.cs" />
     <Compile Include="Assets\Scripts\CamoProject\PopulationManager.cs" />
     <Compile Include="Assets\Scripts\GAs Senses\BrainCapsule.cs" />
